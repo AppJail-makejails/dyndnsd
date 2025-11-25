@@ -33,7 +33,7 @@ COPY "${dyndnsd_config}" /dyndnsd.yml
 COPY "${dyndnsd_nsd_config}" /usr/local/etc/nsd/nsd.conf
 
 RAW if [ "${dyndnsd_server_count}" = 0 ]; then
-        RAW procs=`sysctl hw.ncpu`
+        RAW procs=`sysctl -n hw.ncpu`
         VAR --make-arg-env dyndnsd_server_count=${procs}
 RAW fi
 
