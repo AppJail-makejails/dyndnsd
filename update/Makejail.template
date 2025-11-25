@@ -21,6 +21,10 @@ ARG dyndnsd_primary_zone=home.arpa
 ARG dyndnsd_dyn_domain=dyn
 ARG dyndnsd_ns_domain=ns
 ARG dyndnsd_ttl=5m
+ARG dyndnsd_serial=0
+ARG dyndnsd_refresh=3600
+ARG dyndnsd_retry=900
+ARG dyndnsd_expire=604800
 
 FROM --entrypoint "${dyndnsd_ajspec}" dyndnsd:${dyndnsd_tag}
 
@@ -38,6 +42,11 @@ COPY "${dyndnsd_nsd_config}" /usr/local/etc/nsd/nsd.conf
 RAW if [ "${dyndnsd_server_count}" = 0 ]; then
         RAW procs=`sysctl -n hw.ncpu`
         VAR --make-arg-env dyndnsd_server_count=${procs}
+RAW fi
+
+RAW if [ "${dyndnsd_serial}" = 0 ]; then
+        RAW serial=`date +"%s"`
+        VAR --make-arg-env dyndnsd_serial=${serial}
 RAW fi
 
 VAR nsd_conf=/usr/local/etc/nsd/nsd.conf
@@ -70,6 +79,10 @@ REPLACE ${zone_file} TTL ${dyndnsd_ttl}
 REPLACE ${zone_file} NS_DOMAIN ${dyndnsd_ns_domain}
 REPLACE ${zone_file} ADMIN_EMAIL ${dyndnsd_admin_email}
 REPLACE ${zone_file} NAMESERVER ${dyndnsd_nameserver}
+REPLACE ${zone_file} SERIAL ${dyndnsd_serial}
+REPLACE ${zone_file} REFRESH ${dyndnsd_refresh}
+REPLACE ${zone_file} RETRY ${dyndnsd_retry}
+REPLACE ${zone_file} EXPIRE ${dyndnsd_expire}
 
 COPY scripts
 
