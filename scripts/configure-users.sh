@@ -1,5 +1,8 @@
 #!/bin/sh
 
+DYN_DOMAIN="%{DYN_DOMAIN}"
+PRIMARY_ZONE="%{PRIMARY_ZONE}"
+
 do_users=true
 
 env | grep -Ee '^DYNDNSD_USERS=.+' | while IFS= read -r env; do
@@ -13,7 +16,7 @@ env | grep -Ee '^DYNDNSD_USERS=.+' | while IFS= read -r env; do
             password="${user}"
         fi
 
-        if ! printf "%s" "${user}" | grep -qEe '^[a-zA-Z0-9][a-zA-Z0-9_]$'; then
+        if ! printf "%s" "${user}" | grep -qEe '^[a-zA-Z0-9][a-zA-Z0-9_]+$'; then
             continue
         fi
 
@@ -23,8 +26,8 @@ env | grep -Ee '^DYNDNSD_USERS=.+' | while IFS= read -r env; do
             do_users=false
         fi
 
-        printf "\t%s:\n" "${user}"
-        printf "\t\tpassword: \"%s\"\n" "${password}"
+        printf "  %s:\n" "${user}"
+        printf "    password: \"%s\"\n" "${password}"
 
         do_hosts=true
 
@@ -37,12 +40,12 @@ env | grep -Ee '^DYNDNSD_USERS=.+' | while IFS= read -r env; do
                 fi
 
                 if ${do_hosts}; then
-                    printf "\t\thosts:\n"
+                    printf "    hosts:\n"
 
                     do_hosts=false
                 fi
 
-                printf "\t\t\t- %s\n" "${host}"
+                printf "      - %s\n" "${host}.${DYN_DOMAIN}.${PRIMARY_ZONE}"
             done
         done
     done

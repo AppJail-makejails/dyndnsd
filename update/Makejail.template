@@ -91,6 +91,8 @@ ENV PRIMARY_ZONE=${dyndnsd_primary_zone}
 
 RUN /scripts/configure-users.sh
 
+CMD rm -rf /scripts
+
 SYSRC nsd_enable=YES
 
 STOP

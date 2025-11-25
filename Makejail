@@ -86,10 +86,12 @@ REPLACE ${zone_file} EXPIRE ${dyndnsd_expire}
 
 COPY scripts
 
-ENV DYN_DOMAIN=${dyndnsd_dyn_domain}
-ENV PRIMARY_ZONE=${dyndnsd_primary_zone}
+REPLACE /scripts/configure-users.sh DYN_DOMAIN ${dyndnsd_dyn_domain}
+REPLACE /scripts/configure-users.sh PRIMARY_ZONE ${dyndnsd_primary_zone}
 
 RUN /scripts/configure-users.sh
+
+CMD rm -rf /scripts
 
 SYSRC nsd_enable=YES
 
