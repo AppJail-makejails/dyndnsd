@@ -27,7 +27,9 @@ FROM --entrypoint "${dyndnsd_ajspec}" dyndnsd:${dyndnsd_tag}
 COPY ${dyndnsd_doas_config} /usr/local/etc/doas.conf
 
 CMD mkdir -p /nsd /nsd/zones /nsd/zones/static
-CMD chown nsd:nsd /nsd /nsd/zones /nsd/zones/static
+CMD chown nsd:dyndnsd /nsd /nsd/zones /nsd/zones/static
+CMD mkdir -p /dyndnsd
+CMD chown dyndnsd:dyndnsd /dyndnsd
 
 COPY "${dyndnsd_config}" /dyndnsd.yml
 COPY "${dyndnsd_nsd_config}" /usr/local/etc/nsd/nsd.conf
