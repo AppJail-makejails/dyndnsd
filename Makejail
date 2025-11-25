@@ -1,0 +1,88 @@
+INCLUDE options/options.makejail
+
+ARG dyndnsd_admin_email
+ARG dyndnsd_nameserver
+ARG dyndnsd_tag=13.5
+ARG dyndnsd_ajspec=gh+AppJail-makejails/dyndnsd
+ARG dyndnsd_config=files/dyndnsd.yml
+ARG dyndnsd_nsd_config=files/nsd.conf
+ARG dyndnsd_zonefile=files/home.arpa.zone
+ARG dyndnsd_doas_config=files/doas.conf
+ARG dyndnsd_zone_file=files/file.zone
+ARG dyndnsd_server_count=0
+ARG dyndnsd_do_ip4=yes
+ARG dyndnsd_do_ip6=no
+ARG dyndnsd_port=53
+ARG dyndnsd_verbosity=0
+ARG dyndnsd_tcp_count=100
+ARG dyndnsd_tcp_reject_overflow=no
+ARG dyndnsd_tcp_query_count=0
+ARG dyndnsd_primary_zone=home.arpa
+ARG dyndnsd_dyn_domain=dyn
+ARG dyndnsd_ns_domain=ns
+ARG dyndnsd_ttl=5m
+
+FROM --entrypoint "${dyndnsd_ajspec}" dyndnsd:${dyndnsd_tag}
+
+CMD mkdir -p /nsd /nsd/zones /nsd/zones/static
+CMD chown nsd:nsd /nsd /nsd/zones /nsd/zones/static
+
+COPY "${dyndnsd_config}" /dyndnsd.yml
+COPY "${dyndnsd_nsd_config}" /usr/local/etc/nsd/nsd.conf
+
+RAW if [ "${dyndnsd_server_count}" = 0 ]; then
+        RAW procs=`sysctl hw.ncpu`
+        VAR --make-arg-env dyndnsd_server_count=${procs}
+RAW fi
+
+VAR nsd_conf=/usr/local/etc/nsd/nsd.conf
+
+REPLACE ${nsd_conf} SERVER_COUNT ${dyndnsd_server_count}
+REPLACE ${nsd_conf} DO_IP4 ${dyndnsd_do_ip4}
+REPLACE ${nsd_conf} DO_IP6 ${dyndnsd_do_ip6}
+REPLACE ${nsd_conf} PORT ${dyndnsd_port}
+REPLACE ${nsd_conf} VERBOSITY ${dyndnsd_verbosity}
+REPLACE ${nsd_conf} TCP_COUNT ${dyndnsd_tcp_count}
+REPLACE ${nsd_conf} TCP_REJECT_OVERFLOW ${dyndnsd_tcp_reject_overflow}
+REPLACE ${nsd_conf} TCP_QUERY_COUNT ${dyndnsd_tcp_query_count}
+REPLACE ${nsd_conf} PRIMARY_ZONE ${dyndnsd_primary_zone}
+REPLACE ${nsd_conf} DYN_DOMAIN ${dyndnsd_dyn_domain}
+
+VAR dyndnsd_conf=/dyndnsd.yml
+
+REPLACE ${dyndnsd_conf} DYN_DOMAIN ${dyndnsd_dyn_domain}
+REPLACE ${dyndnsd_conf} PRIMARY_ZONE ${dyndnsd_primary_zone}
+REPLACE ${dyndnsd_conf} NS_DOMAIN ${dyndnsd_ns_domain}
+REPLACE ${dyndnsd_conf} ADMIN_EMAIL ${dyndnsd_admin_email}
+REPLACE ${dyndnsd_conf} TTL ${dyndnsd_ttl}
+
+VAR zone_file=/nsd/zones/static/${dyndnsd_primary_zone}.zone
+
+COPY ${dyndnsd_zone_file} ${zone_file}
+
+REPLACE ${zone_file} PRIMARY_ZONE ${dyndnsd_primary_zone}
+REPLACE ${zone_file} TTL ${dyndnsd_ttl}
+REPLACE ${zone_file} NS_DOMAIN ${dyndnsd_ns_domain}
+REPLACE ${zone_file} ADMIN_EMAIL ${dyndnsd_admin_email}
+REPLACE ${zone_file} NAMESERVER ${dyndnsd_nameserver}
+
+COPY scripts
+
+ENV DYN_DOMAIN=${dyndnsd_dyn_domain}
+ENV PRIMARY_ZONE=${dyndnsd_primary_zone}
+
+RUN /scripts/configure-users.sh
+
+SYSRC nsd_enable=YES
+
+STOP
+
+STAGE start
+
+RUN daemon \
+    -c \
+    -t "Small, lightweight and extensible DynDNS server written with Ruby and Rack" \
+    -u dyndnsd \
+    -p /var/run/dyndnsd.pid \
+    -T dyndnsd \
+        dyndnsd /dyndnsd.yml

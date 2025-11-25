@@ -1,0 +1,15 @@
+host: "0.0.0.0"
+port: 5354
+username: "dyndnsd"
+group: "dyndnsd"
+db: "/dyndnsd/db.json"
+debug: false
+domain: "%{DYN_DOMAIN}.%{PRIMARY_ZONE}"
+updater:
+  name: "command_with_bind_zone"
+  params:
+    zone_file: "/nsd/zones/static/%{DYN_DOMAIN}.%{PRIMARY_ZONE}.zone"
+    command: "doas service nsd reload"
+    ttl: "%{TTL}"
+    dns: "%{NS_DOMAIN}.%{PRIMARY_ZONE}."
+    email_addr: "%{ADMIN_EMAIL}"

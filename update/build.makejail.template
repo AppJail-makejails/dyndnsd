@@ -1,0 +1,10 @@
+INCLUDE options/options.makejail
+INCLUDE options/volumes.makejail
+
+PKG nsd doas ruby%%RUBYVER%%-gems rubygem-atomic
+
+CMD gem install dyndnsd
+
+CMD pw useradd -n dyndnsd -c "DynDNS-compliant server" -d /dyndnsd -s /bin/sh
+CMD mkdir -p /dyndnsd
+CMD chown dyndnsd:dyndnsd /dyndnsd

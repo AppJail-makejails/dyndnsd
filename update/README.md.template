@@ -16,5 +16,5 @@ github.com/cmur2/dyndnsd
 
 | Tag           | Arch    | Version            | Type   |
 | ------------- | --------| ------------------ | ------ |
-| `13.5`    | `amd64` | `13.5-RELEASE` | `thin` |
-| `14.3`    | `amd64` | `14.3-RELEASE` | `thin` |
+| `%%TAG1%%`    | `amd64` | `%%TAG1%%-RELEASE` | `thin` |
+| `%%TAG2%%`    | `amd64` | `%%TAG2%%-RELEASE` | `thin` |

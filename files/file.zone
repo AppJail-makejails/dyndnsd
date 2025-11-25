@@ -1,0 +1,12 @@
+$ORIGIN %{PRIMARY_ZONE}.
+$TTL %{TTL}
+
+@       IN      SOA     %{NS_DOMAIN}.%{PRIMARY_ZONE}.  %{ADMIN_EMAIL}. (
+                        %{SERIAL}
+                        %{REFRESH}
+                        %{RETRY}
+                        %{EXPIRE}
+                        %{TTL} )
+        IN      NS      %{NS_DOMAIN}.%{PRIMARY_ZONE}.
+
+%{NS_DOMAIN}      IN      A       %{NAMESERVER}
