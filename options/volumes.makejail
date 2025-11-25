@@ -1,2 +1,2 @@
 OPTION volume=nsd-data mountpoint:/nsd owner:216 group:216
-OPTION volume=dyndnsd-data mountpoint=/dyndnsd owner:1001 group:1001
+OPTION volume=dyndnsd-data mountpoint:/dyndnsd owner:1001 group:1001
