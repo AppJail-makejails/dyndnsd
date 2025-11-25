@@ -24,6 +24,8 @@ ARG dyndnsd_ttl=5m
 
 FROM --entrypoint "${dyndnsd_ajspec}" dyndnsd:${dyndnsd_tag}
 
+COPY ${dyndnsd_doas_config} /usr/local/etc/doas.conf
+
 CMD mkdir -p /nsd /nsd/zones /nsd/zones/static
 CMD chown nsd:nsd /nsd /nsd/zones /nsd/zones/static
 
