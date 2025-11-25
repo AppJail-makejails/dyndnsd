@@ -28,6 +28,7 @@ COPY ${dyndnsd_doas_config} /usr/local/etc/doas.conf
 
 CMD mkdir -p /nsd /nsd/zones /nsd/zones/static
 CMD chown nsd:dyndnsd /nsd /nsd/zones /nsd/zones/static
+CMD chmod 770 /nsd/zones/static
 CMD mkdir -p /dyndnsd
 CMD chown dyndnsd:dyndnsd /dyndnsd
 
