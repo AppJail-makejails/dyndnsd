@@ -10,8 +10,8 @@ env | grep -Ee '^DYNDNSD_USERS=.+' | while IFS= read -r env; do
 
     for user in ${users}; do
         if printf "%s" "${user}" | grep -qEe '^[^:]+:[^:]+$'; then
-            password=`printf "%s" "${user}" | cut -s -d= -f2-`
-            user=`printf "%s" "${user}" | cut -s -d= -f1`
+            password=`printf "%s" "${user}" | cut -s -d: -f2-`
+            user=`printf "%s" "${user}" | cut -s -d: -f1`
         else
             password="${user}"
         fi
