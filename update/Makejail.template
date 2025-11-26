@@ -6,7 +6,6 @@ ARG dyndnsd_tag=%%TAG1%%
 ARG dyndnsd_ajspec=gh+AppJail-makejails/dyndnsd
 ARG dyndnsd_config=files/dyndnsd.yml
 ARG dyndnsd_nsd_config=files/nsd.conf
-ARG dyndnsd_zonefile=files/home.arpa.zone
 ARG dyndnsd_doas_config=files/doas.conf
 ARG dyndnsd_zone_file=files/file.zone
 ARG dyndnsd_server_count=0
@@ -86,8 +85,8 @@ REPLACE ${zone_file} EXPIRE ${dyndnsd_expire}
 
 COPY scripts
 
-ENV DYN_DOMAIN=${dyndnsd_dyn_domain}
-ENV PRIMARY_ZONE=${dyndnsd_primary_zone}
+REPLACE /scripts/configure-users.sh DYN_DOMAIN ${dyndnsd_dyn_domain}
+REPLACE /scripts/configure-users.sh PRIMARY_ZONE ${dyndnsd_primary_zone}
 
 RUN /scripts/configure-users.sh
 

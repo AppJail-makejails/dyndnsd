@@ -6,7 +6,6 @@ ARG dyndnsd_tag=13.5
 ARG dyndnsd_ajspec=gh+AppJail-makejails/dyndnsd
 ARG dyndnsd_config=files/dyndnsd.yml
 ARG dyndnsd_nsd_config=files/nsd.conf
-ARG dyndnsd_zonefile=files/home.arpa.zone
 ARG dyndnsd_doas_config=files/doas.conf
 ARG dyndnsd_zone_file=files/file.zone
 ARG dyndnsd_server_count=0
