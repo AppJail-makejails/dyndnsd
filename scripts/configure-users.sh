@@ -48,5 +48,11 @@ env | grep -Ee '^DYNDNSD_USERS=.+' | while IFS= read -r env; do
                 printf "      - %s\n" "${host}.${DYN_DOMAIN}.${PRIMARY_ZONE}"
             done
         done
+
+        env | grep -Ee "^DYNDNSD_REGEX_${user}=.+" | while IFS= read -r env; do
+            regex=`printf "%s" "${env}" | cut -s -d= -f2-`
+
+            printf "    regex: \"%s\"\n" "${regex}"
+        done
     done
 done >> /dyndnsd.yml

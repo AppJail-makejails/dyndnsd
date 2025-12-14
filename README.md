@@ -21,7 +21,7 @@ appjail makejail \
     --dyndnsd_nameserver 10.0.0.70
 ```
 
-Here we are deploying `dyndnsd` with `nsd` installed in the same jail, however, we are only exposing port `5354`, which is the one used by dyndnsd, but we could also expose port `53` (although this mean that we should set `--dyndnsd_nameserver` to the external IP address). However, in the above example, we assume that nsd is deployed with a forward DNS server such as CoreDNS or DNSMasq that redirects the all queries from `home.arpa` domain (default, but can be changed) to `10.0.0.70`. For example, in DNSMasq, you can put the following in your configuration file:
+Here we are deploying `dyndnsd` with `nsd` installed in the same jail, however, we are only exposing port `5354`, which is the one used by dyndnsd, but we could also expose port `53` (although this mean that we should set `--dyndnsd_nameserver` to the external IP address). However, in the above example, we assume that nsd is deployed with a forward DNS server such as CoreDNS or DNSMasq that redirects all queries from `home.arpa` domain (default, but can be changed) to `10.0.0.70`. For example, in DNSMasq, you can put the following in your configuration file:
 
 ```
 server=/home.arpa/10.0.0.70
@@ -68,6 +68,7 @@ abc.dyn.home.arpa has address 2.1.3.2
 
 * `DYNDNSD_USERS` (optional): Space-separated list of users. Each element specifies a user, but optionally a password can be specified in the format `user:password`. If no password is specified, it will have the same value as the username. If the user doesn't match the regex `^[a-zA-Z0-9][a-zA-Z0-9_]+$`, it's silently ignored.
 * `DYNDNSD_HOSTS_<user>` (optional): Space-separated list of hosts that the user will control. The user must be specified in `DYNDNSD_USERS` or this environment variable will be silently ignored. Each host must match `^[a-zA-Z0-9]([-a-zA-Z0-9]{0,61}[a-zA-Z0-9])?$` or it will be silently ignored. Each host is concatenated with the values specified in the arguments `dyndnsd_dyn_domain` and `dyndnsd_primary_zone`.
+* `DYNDNSD_REGEX_<user>` (optional): Allow a user to use any hostname that match this regex. Read [this](https://github.com/cmur2/dyndnsd?tab=readme-ov-file#matching-with-a-regular-expression) for details.
 
 ### Volumes
 
