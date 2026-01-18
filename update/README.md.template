@@ -82,4 +82,4 @@ abc.dyn.home.arpa has address 2.1.3.2
 | Tag           | Arch    | Version            | Type   |
 | ------------- | --------| ------------------ | ------ |
 | `%%TAG1%%`    | `amd64` | `%%TAG1%%-RELEASE` | `thin` |
-| `%%TAG2%%`    | `amd64` | `%%TAG2%%-RELEASE` | `thin` |
+| `%%TAG2%%`    | `amd64` | `%%TAG2%%` | `thin` |

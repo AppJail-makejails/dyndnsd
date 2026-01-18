@@ -60,7 +60,7 @@ abc.dyn.home.arpa has address 2.1.3.2
 * `dyndnsd_retry` (default: `900`): Interval that should elapse before a failed refresh should be retried.
 * `dyndnsd_expire` (default: `604800`): Value that specifies the upper limit on the time interval that can elapse before the zone is no longer authoritative.
 * `dyndnsd_ajspec` (default: `gh+AppJail-makejails/dyndnsd`): Entry point where the `appjail-ajspec(5)` file is located.
-* `dyndnsd_tag` (default: `13.5`): see [#tags](#tags).
+* `dyndnsd_tag` (default: `14.3`): see [#tags](#tags).
 
 **Note**: As you have seen, most of the above parameters are implemented to configure NSD conveniently, but not all parameters are implemented, only some. See [files/nsd.conf](files/nsd.conf) for more details.
 
@@ -81,5 +81,5 @@ abc.dyn.home.arpa has address 2.1.3.2
 
 | Tag           | Arch    | Version            | Type   |
 | ------------- | --------| ------------------ | ------ |
-| `13.5`    | `amd64` | `13.5-RELEASE` | `thin` |
 | `14.3`    | `amd64` | `14.3-RELEASE` | `thin` |
+| `15`    | `amd64` | `15` | `thin` |

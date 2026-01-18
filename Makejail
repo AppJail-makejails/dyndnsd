@@ -2,7 +2,7 @@ INCLUDE options/options.makejail
 
 ARG dyndnsd_admin_email
 ARG dyndnsd_nameserver
-ARG dyndnsd_tag=13.5
+ARG dyndnsd_tag=14.3
 ARG dyndnsd_ajspec=gh+AppJail-makejails/dyndnsd
 ARG dyndnsd_config=files/dyndnsd.yml
 ARG dyndnsd_nsd_config=files/nsd.conf
