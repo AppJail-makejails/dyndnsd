@@ -1,9 +1,7 @@
-INCLUDE options/options.makejail
-
+ARG dyndnsd_from=ghcr.io/appjail-makejails/dyndnsd
+ARG dyndnsd_tag=latest
 ARG dyndnsd_admin_email
 ARG dyndnsd_nameserver
-ARG dyndnsd_tag=14.3
-ARG dyndnsd_ajspec=gh+AppJail-makejails/dyndnsd
 ARG dyndnsd_config=files/dyndnsd.yml
 ARG dyndnsd_nsd_config=files/nsd.conf
 ARG dyndnsd_doas_config=files/doas.conf
@@ -25,15 +23,22 @@ ARG dyndnsd_refresh=3600
 ARG dyndnsd_retry=900
 ARG dyndnsd_expire=604800
 
-FROM --entrypoint "${dyndnsd_ajspec}" dyndnsd:${dyndnsd_tag}
+INCLUDE gh+AppJail-makejails/user-mapping
+INCLUDE options/volumes.makejail
+
+OPTION overwrite=force
+OPTION from=${dyndnsd_from}:${dyndnsd_tag}
 
 COPY ${dyndnsd_doas_config} /usr/local/etc/doas.conf
 
+CMD chown root:wheel /usr/local/etc/doas.conf
+CMD chmod 600 /usr/local/etc/doas.conf
+
 CMD mkdir -p /nsd /nsd/zones /nsd/zones/static
-CMD chown nsd:dyndnsd /nsd /nsd/zones /nsd/zones/static
+CMD chown -R nsd:noroot /nsd /nsd/zones /nsd/zones/static
 CMD chmod 770 /nsd/zones/static
 CMD mkdir -p /dyndnsd
-CMD chown dyndnsd:dyndnsd /dyndnsd
+CMD chown -R noroot:noroot /dyndnsd
 
 COPY "${dyndnsd_config}" /dyndnsd.yml
 COPY "${dyndnsd_nsd_config}" /usr/local/etc/nsd/nsd.conf
@@ -100,8 +105,8 @@ STAGE start
 
 RUN daemon \
     -c \
-    -t "Small, lightweight and extensible DynDNS server written with Ruby and Rack" \
-    -u dyndnsd \
+    -t "dyndnsd: Small, lightweight and extensible DynDNS server written with Ruby and Rack" \
+    -u noroot \
     -p /var/run/dyndnsd.pid \
     -T dyndnsd \
         dyndnsd /dyndnsd.yml
