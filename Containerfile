@@ -26,4 +26,8 @@ RUN set -xe; \
 
 RUN umask 0022; \
     \
-    gem install dyndnsd
+    gem install dyndnsd; \
+    \
+    if [ -z "${NO_PKGCLEAN}" ]; then \
+        rm -rf /.cache; \
+    fi
