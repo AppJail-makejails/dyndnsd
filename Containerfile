@@ -16,7 +16,7 @@ RUN set -xe; \
     umask 0022; \
     \
     pkg update; \
-    pkg install -U FreeBSD-set-base-jail nsd doas devel/ruby-gems rubygem-atomic; \
+    pkg install FreeBSD-set-base-jail nsd doas devel/ruby-gems rubygem-atomic; \
     \
     if [ -z "${NO_PKGCLEAN}" ]; then \
         pkg clean -a; \
