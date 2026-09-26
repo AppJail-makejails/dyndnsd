@@ -22,7 +22,11 @@ RUN set -xe; \
         pkg clean -a; \
         rm -rf /var/cache/pkg/*; \
     fi; \
-    rm -rf /var/db/pkg/repos/*
+    rm -rf /var/db/pkg/repos/*; \
+    \
+# Workaround until podman package includes the fixes for the setuid bit.
+# The port already has the fix, but the package does not.
+    chmod 4755 /usr/local/bin/doas
 
 RUN umask 0022; \
     \
